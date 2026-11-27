@@ -3,7 +3,12 @@
 # Numerical examples describe the workshop dataset and settings.
 
 # Load project helpers and the packaged inputs used below.
-source("r_studio_run/00_setup.R", local = TRUE)
+# Block 01: Open the shared lesson setup ----
+lesson_setup <- "thimphu_WUI/r_studio_run/00_setup.R"
+if (!file.exists(lesson_setup)) lesson_setup <- "r_studio_run/00_setup.R"
+source(lesson_setup, local = TRUE)
+
+# Block 02: Run the short exercise and read its output ----
 
 an <- read.csv(tw("data/derived/wui_annual_dynamic_world.csv")); full <- an[!an$partial, ]
 print(full[, c("year", "built_km2", "wui_km2", "mean_valid_obs")], row.names = FALSE)

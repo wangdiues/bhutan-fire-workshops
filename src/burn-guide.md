@@ -8,7 +8,9 @@ guide: true
 
 Adapted from the corresponding FIRE–BHUTAN workshop guide PDF. The theory, data notes,
 analysis walk-through, exercises and glossary are presented below. The commands use RStudio.
-Use the actual workshop layers supplied in the [participant ZIP](downloads.html).
+Use the actual workshop layers supplied in the [combined participant ZIP](downloads.html).
+The main practicals run from the combined RStudio project. The original analysis
+examples in this reference guide use paths within the individual workshop folders.
 Some maps and example output are described here and available through the participant project.
 
 [Workshop practical scripts](burn.html#practicals) · [RStudio setup](setup.html)
@@ -398,14 +400,16 @@ The `recovery` section sets the trajectory years. The `field_plan` section sets 
 ### 5.1 Prepare the workshop project
 
 1. Download the real-data project ZIP from the organizer's Google Drive link and extract the whole archive.
-2. Open the `.Rproj` in RStudio. Install the R packages listed in `WORKSHOP_START.txt` before going offline.
+2. Open `Bhutan_Forest_Fire_Workshops.Rproj` in RStudio. Run `01_Install_Workshop_Packages.R` once before going offline.
 3. Open `r_studio_run/` in RStudio. Select a section and press **Ctrl+Enter** or click **Source** to execute the complete file.
 
 ### 5.2 Inspect outputs and run the stages
 
 Open the practical named for the output folder you need. Its default is to work directly
-with the reviewed real-data outputs in the ZIP. Change `rebuild <- FALSE` to `TRUE` in a
-working copy to regenerate the result. Read the input and interpretation notes inside the file.
+with the reviewed real-data outputs in the ZIP. In a separate working copy, change
+`rebuild <- FALSE` to `TRUE` in Block 10 to regenerate the result.
+
+The commands below also work when an instructor opens the individual workshop project.
 
 ```r
 source("START_HERE.R")

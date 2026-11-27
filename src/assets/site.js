@@ -1,16 +1,17 @@
-for (const code of document.querySelectorAll("pre > code")) {
-  if (!navigator.clipboard?.writeText) continue;
-  const button = document.createElement("button");
-  button.type = "button";
-  button.textContent = "Copy code";
-  button.className = "copy";
+for (const button of document.querySelectorAll("[data-copy]")) {
+  const code = document.getElementById(button.dataset.copy);
+  const status = button.parentElement.querySelector(".copy-status");
   button.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(code.textContent);
-      button.textContent = "Copied";
+      status.textContent = "Copied. Paste into the RStudio editor.";
     } catch {
-      button.textContent = "Select and copy the code";
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      status.textContent = "Code selected. Press Ctrl+C to copy it.";
     }
   });
-  code.parentElement.before(button);
 }

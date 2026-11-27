@@ -1,8 +1,8 @@
-# Open the workshop .Rproj before sourcing this setup.
-if (!file.exists("config/settings.json")) {
-  stop("Open the workshop .Rproj from the extracted participant ZIP.", call. = FALSE)
-}
-source("R/tp_common.R", local = TRUE)
+# Open the combined or individual workshop .Rproj before running a lesson.
+common_file <- "thimphu_paro_burn_severity/R/tp_common.R"
+if (!file.exists(common_file)) common_file <- "R/tp_common.R"
+if (!file.exists(common_file)) stop("Open the .Rproj from the extracted ZIP.", call. = FALSE)
+source(common_file, local = TRUE)
 terraOptions(progress = 0)
 options(width = 200)
 set.seed(20261124)

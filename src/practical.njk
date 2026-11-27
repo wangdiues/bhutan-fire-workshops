@@ -1,0 +1,73 @@
+---
+pagination:
+  data: practicals
+  size: 1
+  alias: practical
+layout: page.njk
+permalink: "{{ practical.href }}"
+eleventyComputed:
+  title: "{{ practical.title }}"
+---
+<p class="eyebrow"><a href="{{ practical.course }}.html#practicals">{{ practical.courseTitle }}</a></p>
+<h1>{{ practical.title }}</h1>
+<p class="lead">Work with the real files for <code>{{ practical.target }}</code>.</p>
+<nav class="lesson-jumps" aria-label="On this page">
+<a href="#method">Understand the method</a><a href="#block-guide">Follow the blocks</a><a href="#complete-script">Copy the complete script</a>
+</nav>
+<aside class="callout"><strong>Before you start</strong>
+<p>Open <code>Bhutan_Forest_Fire_Workshops.Rproj</code>. Keep this lesson on one side of the screen and RStudio on the other. Copy the full script into a new R Script tab. Select one numbered block at a time and press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. <a href="setup.html">See the one-time setup.</a></p>
+</aside>
+
+<h2 id="method">What are we doing?</h2>
+<p>{{ practical.method }}</p>
+<h3>Why does it matter?</h3>
+<p>{{ practical.why }}</p>
+<h3>What data will we use?</h3>
+<dl class="file-list">
+{% for file in practical.files %}
+<dt><code>{{ file[1] }}</code></dt><dd>{{ file[2] }}</dd>
+{% endfor %}
+{% if practical.extraPaths %}<dt>Training event raster</dt><dd>The change-class map identified by the project’s example settings. It is read directly from the participant ZIP.</dd>{% endif %}
+</dl>
+<p><strong>For a full replay</strong> {{ practical.rebuildInputs }}</p>
+<h3>How does it work?</h3>
+<ol>{% for step in practical.steps %}<li>{{ step }}</li>{% endfor %}</ol>
+<p class="formula">{{ practical.formula }}</p>
+<h3>What do the results mean?</h3>
+<p>{{ practical.result }}</p>
+{% for figure in practical.figures %}
+<figure class="example">
+<img src="assets/{{ practical.course }}/{{ figure[0] }}" alt="{{ figure[1] }}" loading="lazy">
+<figcaption>{{ figure[1] }}</figcaption>
+</figure>
+{% endfor %}
+{% if practical.folder == "03-cbi-plan" %}
+<figure class="example"><div class="sample-chart" role="img" aria-label="The reviewed plan includes 100 calibration plots and 200 independent accuracy points.">
+<p>Calibration · <strong>100 plots</strong></p><div class="sample-bar half"></div>
+<p>Independent accuracy · <strong>200 points</strong></p><div class="sample-bar"></div>
+</div><figcaption>Planned sample sizes from the reviewed CBI design.</figcaption></figure>
+{% endif %}
+<h3>How can Bhutan use this evidence?</h3>
+<p>{{ practical.use }}</p>
+<p><a href="{{ practical.course }}-guide.html#part-{{ practical.guide }}">Detailed methods and worked examples in the workshop guide</a></p>
+
+<h2 id="block-guide">Run one block at a time</h2>
+<ol class="block-guide">
+{% for block in practical.blocks %}
+<li><strong>Block {{ block.number }} · {{ block.title }}</strong>
+<p>{{ block.purpose }}</p><p><b>What to look for</b> {{ block.expected }}</p></li>
+{% endfor %}
+</ol>
+<h2 id="complete-script">Complete R script</h2>
+<p>Paste once into <strong>File → New File → R Script</strong>. Save your copy anywhere inside the open project. The relative file paths start from the project folder.</p>
+<div class="code-tools"><button class="button" type="button" data-copy="full-practical">Copy All Code</button>
+<a href="{{ practical.path }}" download>Download the .R file</a>
+<span class="copy-status" aria-live="polite"></span></div>
+<pre><code id="full-practical">{{ practical.code | escape }}</code></pre>
+<h2>Explain what you found</h2>
+<p>{{ practical.question }}</p>
+<nav class="pager" aria-label="Practical navigation">
+{% if practical.previous %}<a href="{{ practical.previous }}">← Previous practical</a>{% endif %}
+<a href="{{ practical.course }}.html#practicals">All practicals</a>
+{% if practical.next %}<a href="{{ practical.next }}">Next practical →</a>{% endif %}
+</nav>

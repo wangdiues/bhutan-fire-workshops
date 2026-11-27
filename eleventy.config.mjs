@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
+import { practicals as teachingPlan } from "./practicals.mjs";
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const runs = {
@@ -28,6 +29,13 @@ export default function (config) {
     };
   });
   const release = JSON.parse(read("./src/drive-links.json"));
+  if (release.combined.url && !/^https:\/\/drive\.google\.com\//.test(release.combined.url))
+    throw new Error("Use a restricted Google Drive URL for the combined package.");
+  config.addGlobalData("participantPackage", release.combined);
+  const installer = read("./src/start/01_Install_Workshop_Packages.R");
+  config.addGlobalData("installer", installer);
+  config.addGlobalData("packageDescriptions", [...installer.matchAll(/^  (\w+) = "([^"]+)",?$/gm)]
+    .map(([, name, description]) => ({ name, description })));
   const courses = [];
   let course;
   for (const line of read("./src/courses.txt").trim().split(/\r?\n/)) {
@@ -37,13 +45,26 @@ export default function (config) {
       course.demo = read(`./src/examples/${id}-demo.R`);
       course.stageFiles = readdirSync(new URL(`./src/code/${id}/scripts/`, import.meta.url));
       course.helperFiles = readdirSync(new URL(`./src/code/${id}/R/`, import.meta.url));
-      course.practicals = readdirSync(new URL(`./src/code/${id}/r_studio_run/`, import.meta.url))
-        .filter((file) => file.startsWith("practical-"))
-        .map((file) => {
+      course.practicals = teachingPlan.filter((practical) => practical.course === id)
+        .map((practical) => {
+          const file = `practical-${practical.folder}.R`;
           const path = `code/${id}/r_studio_run/${file}`;
           const code = read(`./src/${path}`);
-          const [title, target] = code.split("\n")[0].slice(2).split(" | ");
-          return { path, code, title, target };
+          const expected = [
+            "Packages are ready.",
+            "The correct workshop folder is shown in the Console.",
+            "Each named path points to a file in the project.",
+            "All required data files are available.",
+            "The imported maps or tables appear in Environment.",
+            ...practical.expected,
+            `teaching_outputs/${practical.folder}.csv is saved in the workshop folder.`,
+            "With FALSE the replay is skipped. With TRUE the Console shows a log path and output status.",
+          ];
+          const blocks = [...code.matchAll(/^# Block (\d{2}): (.+?) ----\r?\n# (.+)$/gm)]
+            .map(([, number, title, purpose], index) => ({ number, title, purpose, expected: expected[index] }));
+          if (blocks.length !== expected.length) throw new Error("Outdated practical script: " + path);
+          return { ...practical, path, code, blocks, href: `${id}-practical-${practical.folder}.html`,
+            target: "outputs/" + practical.folder, courseTitle: course.title };
         });
       if (course.release.url && !/^https:\/\/drive\.google\.com\//.test(course.release.url))
         throw new Error(`Use a Google Drive link for ${id} in drive-links.json.`);
@@ -65,10 +86,14 @@ export default function (config) {
   })));
   config.addGlobalData("courses", courses);
   config.addGlobalData("lessons", lessons);
+  config.addGlobalData("practicals", courses.flatMap((course) => course.practicals.map((practical, index) => ({
+    ...practical, previous: course.practicals[index - 1]?.href, next: course.practicals[index + 1]?.href,
+  }))));
   config.addPassthroughCopy("src/assets");
   config.addPassthroughCopy("src/code/**/*.R");
   config.addPassthroughCopy("src/code/**/*.Rproj");
   config.addPassthroughCopy("src/examples");
+  config.addPassthroughCopy("src/start/*.R");
   for (const file of ["src/courses.txt", "src/drive-links.json", "src/code/**/*.R", "src/examples/*.R"])
     config.addWatchTarget(file);
   return { dir: { input: "src", output: "_site" } };

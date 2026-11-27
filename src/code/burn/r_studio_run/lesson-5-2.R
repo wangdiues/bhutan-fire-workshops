@@ -3,7 +3,12 @@
 # Numerical examples describe the workshop dataset and settings.
 
 # Load project helpers and the packaged inputs used below.
-source("r_studio_run/00_setup.R", local = TRUE)
+# Block 01: Open the shared lesson setup ----
+lesson_setup <- "thimphu_paro_burn_severity/r_studio_run/00_setup.R"
+if (!file.exists(lesson_setup)) lesson_setup <- "r_studio_run/00_setup.R"
+source(lesson_setup, local = TRUE)
+
+# Block 02: Run the short exercise and read its output ----
 
 B <- read.csv(file.path(DER, "field_plan", "B_accuracy_sample.csv"))
 t <- aggregate(cbind(points = 1, inclusion_probability, stratum_area_ha) ~ stratum, B, function(x) c(sum = sum(x), first = x[1]))

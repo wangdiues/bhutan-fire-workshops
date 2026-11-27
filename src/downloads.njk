@@ -3,17 +3,19 @@ layout: page.njk
 title: Workshop downloads
 permalink: downloads.html
 ---
-<h1>Workshop downloads</h1>
-<p>The teaching pages and R code are public. Workshop data are shared with approved participants through Google Drive.</p>
-{% for course in courses %}
-<h2>{{ course.title }}</h2>
-<p>Participant project ZIP · v{{ course.release.version }} · <code>{{ course.release.filename }}</code></p>
-{% if course.release.url %}
-<p><a class="button" href="{{ course.release.url | escape }}">Open participant ZIP in Google Drive</a></p>
+<h1>Get the workshop project</h1>
+<p>One ZIP contains both workshops, the installer, real datasets, reviewed results and an offline copy of these lessons.</p>
+<p>Combined project · v{{ participantPackage.version }} · <code>{{ participantPackage.filename }}</code></p>
+{% if participantPackage.url %}
+<p><a class="button" href="{{ participantPackage.url | escape }}">Open the project ZIP in Google Drive</a></p>
 {% else %}
-<p>The organizer has yet to provide the participant ZIP link.</p>
+<p>Request the combined project ZIP from the workshop organizer. The restricted Google Drive link has yet to be added.</p>
 {% endif %}
-<p><a href="{{ course.id }}.html">View lessons and scripts</a></p>
+<h2>Open the project</h2>
+<p>Extract the entire ZIP and open <code>Bhutan_Forest_Fire_Workshops.Rproj</code>. For offline lessons, open <code>lessons/index.html</code> in a browser. If Drive asks for access, sign in with your registered account.</p>
+<p><a class="button" href="setup.html">Follow the one-time setup</a></p>
+{% for course in courses %}
+{% if course.release.url %}
+<p><a href="{{ course.release.url | escape }}">{{ course.title }} individual project ZIP</a></p>
+{% endif %}
 {% endfor %}
-<h2>Use the ZIP</h2>
-<p>Download while online, extract the whole ZIP, then open the <code>.Rproj</code>. If Drive asks for access, sign in with your registered account. Follow <a href="setup.html">the setup guide</a> before running scripts.</p>

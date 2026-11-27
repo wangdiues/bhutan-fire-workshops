@@ -3,7 +3,12 @@
 # Numerical examples describe the workshop dataset and settings.
 
 # Load project helpers and the packaged inputs used below.
-source("r_studio_run/00_setup.R", local = TRUE)
+# Block 01: Open the shared lesson setup ----
+lesson_setup <- "thimphu_WUI/r_studio_run/00_setup.R"
+if (!file.exists(lesson_setup)) lesson_setup <- "r_studio_run/00_setup.R"
+source(lesson_setup, local = TRUE)
+
+# Block 02: Run the short exercise and read its output ----
 
 hr("Five hand examples (D=20, V=50%, P=100 m)")
 ex <- data.frame(cell = LETTERS[1:5], density = c(30, 30, 30, 5, 5), veg_pct = c(65, 20, 20, 70, 20), patch_m = c(80, 80, 300, 80, 80))

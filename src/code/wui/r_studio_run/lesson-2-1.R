@@ -3,7 +3,12 @@
 # Numerical examples describe the workshop dataset and settings.
 
 # Load project helpers and the packaged inputs used below.
-source("r_studio_run/00_setup.R", local = TRUE)
+# Block 01: Open the shared lesson setup ----
+lesson_setup <- "thimphu_WUI/r_studio_run/00_setup.R"
+if (!file.exists(lesson_setup)) lesson_setup <- "r_studio_run/00_setup.R"
+source(lesson_setup, local = TRUE)
+
+# Block 02: Run the short exercise and read its output ----
 
 g <- grid50()
 ob <- st_read(tw("data/inputs/buildings.gpkg"), "open_buildings_v3", quiet = TRUE)

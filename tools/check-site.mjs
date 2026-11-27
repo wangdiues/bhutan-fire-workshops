@@ -1,14 +1,26 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
 
-const root = resolve("_site");
+const root = resolve(process.argv[2] || "_site");
 const files = readdirSync(root, { recursive: true }).filter((file) => statSync(resolve(root, file)).isFile());
 const html = files.filter((file) => file.endsWith(".html"));
 const lessons = html.filter((file) => /^(wui|burn)-\d-\d\.html$/.test(file));
-if (lessons.length !== 33 || html.length !== 40)
-  throw new Error(`Expected 33 lesson pages and 7 supporting pages, found ${lessons.length} and ${html.length - lessons.length}.`);
+if (lessons.length !== 33 || html.length !== 48)
+  throw new Error(`Expected 33 short lessons, eight practicals and seven supporting pages. Found ${html.length} pages.`);
 const practicals = files.filter((file) => /practical-.*\.R$/.test(file));
 if (practicals.length !== 8) throw new Error("Expected one practical per output folder.");
+for (const path of practicals) {
+  const [, course, name] = /code[\\/](wui|burn)[\\/]r_studio_run[\\/](practical-.*)\.R$/.exec(path);
+  const content = readFileSync(resolve(root, `${course}-${name}.html`), "utf8");
+  const code = readFileSync(resolve(root, path), "utf8");
+  const displayed = content.match(/<code id="full-practical">([\s\S]*?)<\/code>/)?.[1]
+    .replace(/&(amp|quot|lt|gt|#\d+);/g, (_, entity) =>
+      entity.startsWith("#") ? String.fromCodePoint(Number(entity.slice(1))) :
+        ({ amp: "&", quot: '"', lt: "<", gt: ">" })[entity]);
+  if (displayed?.replaceAll("\r\n", "\n") !== code.replaceAll("\r\n", "\n") ||
+      !content.includes('data-copy="full-practical"') || (code.match(/^# Block \d{2}/gm) || []).length !== 10)
+    throw new Error("The HTML must contain the full, matching ten-block script: " + path);
+}
 for (const guide of ["wui-guide.html", "burn-guide.html"]) {
   const content = readFileSync(resolve(root, guide), "utf8");
   for (let part = 1; part <= 8; part++)

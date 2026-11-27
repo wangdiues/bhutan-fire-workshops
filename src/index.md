@@ -5,13 +5,21 @@ permalink: index.html
 ---
 <p class="eyebrow">FIRE–BHUTAN · RSTUDIO TRAINING</p>
 
-# Read the landscape. Run the analysis.
+# Learn forest fire mapping in RStudio
 
-Two hands-on workshops on mapping wildland–urban interfaces and interpreting satellite evidence of forest fires in Bhutan.
+Start with one RStudio project, then follow eight practicals using real data from Bhutan.
+
+<p><a class="button" href="setup.html">Start with the one-time setup</a></p>
+
+<ol class="teaching-steps">
+<li><b>Open the project</b> Extract the combined ZIP and open its RStudio project file.</li>
+<li><b>Copy one script</b> Use the complete script on each lesson page.</li>
+<li><b>Run one block</b> Select a numbered block, press Ctrl + Enter and read the result.</li>
+</ol>
 
 <div class="cards">
 <a class="card" href="wui.html"><span>Thimphu</span><strong>Wildland–Urban Interface</strong><p>Map settlement and vegetation patterns, then examine historical fire and exposure.</p></a>
 <a class="card" href="burn.html"><span>Paro and Thimphu</span><strong>Burn Severity</strong><p>Detect spectral change after fire and design field checks for the resulting maps.</p></a>
 </div>
 
-Start with the [RStudio setup](setup.html) or open either workshop to try a synthetic exercise with base R.
+Keep the lesson open beside RStudio. Each practical explains what each block does and what to look for.

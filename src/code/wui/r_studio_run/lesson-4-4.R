@@ -3,7 +3,12 @@
 # Numerical examples describe the workshop dataset and settings.
 
 # Load project helpers and the packaged inputs used below.
-source("r_studio_run/00_setup.R", local = TRUE)
+# Block 01: Open the shared lesson setup ----
+lesson_setup <- "thimphu_WUI/r_studio_run/00_setup.R"
+if (!file.exists(lesson_setup)) lesson_setup <- "r_studio_run/00_setup.R"
+source(lesson_setup, local = TRUE)
+
+# Block 02: Run the short exercise and read its output ----
 
 ex <- data.frame(cell = c("a", "b", "c", "d", "e"), y2017 = c(1, 0, 1, 0, 1), y2018 = c(1, 0, 1, 1, 0), y2019 = c(1, 0, 0, 0, 0),
                  y2023 = c(1, 1, 0, 1, 1), y2024 = c(1, 1, 0, 1, 0), y2025 = c(0, 1, 0, 1, 0))

@@ -3,27 +3,67 @@ layout: page.njk
 title: RStudio setup
 permalink: setup.html
 ---
-# RStudio setup
+# Set up RStudio once
 
-1. Install R and RStudio Desktop. The workshop projects were tested with R 4.4.0 on Windows. Install the packages listed in `WORKSHOP_START.txt` inside the participant ZIP while you have internet access.
-2. Download and extract the workshop ZIP to a writable local folder. Open the `.Rproj` file inside it. Keep the extracted ZIP as your reference copy and make a second working copy for full-stage runs.
-3. From RStudio’s Files pane, open a lesson in `r_studio_run/`. Select the setup block and press **Ctrl+Enter**. Then run the remaining blocks in order. Click **Source** to run the whole file. Maps from the original lesson workflow are saved under `logs/`.
-4. Use the Console for a full analysis script. Start with the first stage listed on the workshop page.
+## 1. Extract and open the project
 
-```r
-source("START_HERE.R")
-check_project("02")
-# Proceed when preflight says PASS.
-run_project("02")
-```
+1. Install [R](https://cran.r-project.org/) and [RStudio Desktop](https://posit.co/download/rstudio-desktop/). R does the calculations. RStudio gives you an editor, a Console for messages and a Plots pane.
+2. [Get the combined participant ZIP](downloads.html) and extract it to a local folder you can write to. On Windows, right-click the ZIP and choose **Extract All**.
+3. Double-click **Bhutan_Forest_Fire_Workshops.Rproj** in the extracted folder. Its name appears in the upper-right corner of RStudio. Opening it sets the starting folder for all relative paths.
 
-Read the log path printed in the Console and use the workshop page to find the outputs. A preflight pass confirms package and file presence and R syntax. Compare the results with the expected outputs before using them.
+<pre><code>Bhutan Forest Fire Workshops/
+  Bhutan_Forest_Fire_Workshops.Rproj
+  01_Install_Workshop_Packages.R
+  lessons/index.html
+  thimphu_WUI/
+    data/  outputs/  r_studio_run/
+  thimphu_paro_burn_severity/
+    data/  outputs/  r_studio_run/</code></pre>
 
-## Troubleshooting
+Both workshops use this project. Keep the folders together so the scripts can find their files.
 
-- **Missing settings or files.** Reopen the `.Rproj` from the fully extracted ZIP. Check that `getwd()` points to that folder and that the data folders appear beneath it.
-- **Missing R package.** Install the packages named in preflight and restart RStudio. If `jsonlite` is missing, install it first and rerun the check.
-- **Drive requests access.** Sign in with the Google account you registered for the workshop and request access from the organizer.
-- **A recipe fails midway.** Read the full file under `logs/`. Rerun from a fresh working copy if the failed stage had already started replacing outputs.
+## 2. Install the packages
 
-[RStudio Desktop](https://posit.co/download/rstudio-desktop/) · [Running code in RStudio](https://docs.posit.co/ide/user/ide/guide/code/execution.html)
+Open **01_Install_Workshop_Packages.R** in RStudio while online and click **Source** once. The script installs only missing packages. A successful run ends with **Setup complete. All workshop packages are ready.**
+
+<div class="code-tools"><button class="button" type="button" data-copy="install-code">Copy All Code</button>
+<a href="start/01_Install_Workshop_Packages.R" download>Download the installer (.R)</a><span class="copy-status" aria-live="polite"></span></div>
+<pre><code id="install-code">{{ installer | escape }}</code></pre>
+
+<details><summary>What each package does</summary>
+<dl class="file-list">
+{% for package in packageDescriptions %}
+<dt><code>{{ package.name }}</code></dt><dd>{{ package.description }}</dd>
+{% endfor %}
+</dl>
+</details>
+
+## 3. Run your first practical
+
+<ol class="teaching-steps">
+<li><b>Read</b> Open a practical in your browser. Put the lesson beside RStudio.</li>
+<li><b>Copy once</b> Click <b>Copy All Code</b>. In RStudio, choose <b>File → New File → R Script</b>, then paste.</li>
+<li><b>Run one block</b> Highlight Block 01 and press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. Read the Console. Continue in order.</li>
+<li><b>Read the result</b> The Console shows numbers and messages. The Plots pane shows the map or chart. The lesson tells you what to expect.</li>
+</ol>
+
+<figure class="example">
+<div class="screen-plan">
+<div><strong>Left · Browser</strong><p>Read the method and the expected output. Copy the complete script once.</p></div>
+<div><strong>Right · RStudio</strong><p>Paste into the editor. Select a numbered block. Read the Console or Plots pane.</p></div>
+</div>
+<figcaption>Keep the guide beside the editor, so you can follow the notes while you run each block.</figcaption>
+</figure>
+
+A line beginning with `#` is a note. In `year <- 2025`, the arrow stores 2025 under the name `year`. In `terra::rast()`, the double colon tells R to use the `rast()` tool from the terra package.
+
+<p class="links"><a class="button" href="wui-practical-01-sensitivity.html">Start Thimphu WUI</a> <a class="button" href="burn-practical-01-severity.html">Start Burn Severity</a></p>
+
+## If you get stuck
+
+- **R cannot find a file.** Reopen the extracted `.Rproj` and keep the folder structure together.
+- **R reports a missing package.** Run the one-time installer online. If an installed package cannot load, copy the package name and error into your workshop help request.
+- **Copy All Code selects the code instead.** Press Ctrl+C, or download and open the complete `.R` file.
+- **The original analysis is slow.** Complete Blocks 01–09 from the reviewed results. Block 10 replays the original analysis and writes a log. Use a separate project copy for replay.
+
+[RStudio projects](https://docs.posit.co/ide/user/ide/guide/code/projects.html) · [Run selected code](https://docs.posit.co/ide/user/ide/guide/code/execution.html)

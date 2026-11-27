@@ -15,8 +15,10 @@ eleventyComputed:
 <dt>Look for</dt><dd>{{ lesson.expected }}</dd>
 </dl>
 <p>Open <code>{{ lesson.filename }}</code> in RStudio. Run the setup and then each block in order.</p>
-<p><a class="button" href="{{ lesson.script }}" download>Download R script</a></p>
-<pre><code>{{ lesson.code | escape }}</code></pre>
+<h2>Complete R script</h2>
+<div class="code-tools"><button class="button" type="button" data-copy="full-lesson">Copy All Code</button>
+<a href="{{ lesson.script }}" download>Download R script</a><span class="copy-status" aria-live="polite"></span></div>
+<pre><code id="full-lesson">{{ lesson.code | escape }}</code></pre>
 <h2>Interpret the result</h2>
 <p>{{ lesson.question }}</p>
 <nav class="pager" aria-label="Lesson navigation">

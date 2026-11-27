@@ -11,9 +11,16 @@ eleventyComputed:
 <p class="eyebrow">WORKSHOP</p>
 <h1>{{ course.title }}</h1>
 <p class="lead">{{ course.description }}</p>
-<p><strong>Day 1</strong> · RStudio, datasets and concepts<br><strong>Day 2</strong> · Run recipes, replay available stages and interpret maps</p>
-<p><a class="button" href="{{ course.id }}-guide.html">Read the full workshop guide</a></p>
-<p><a href="setup.html">Set up RStudio</a> · <a href="downloads.html">Get the real-data participant ZIP</a> · <a href="#practicals">Go to practical scripts</a></p>
+<p><a class="button" href="{{ course.practicals[0].href }}">Start the first practical</a></p>
+<p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a> · <a href="{{ course.id }}-guide.html">Read the full workshop guide</a></p>
+
+<h2 id="practicals">Real-data practicals</h2>
+<p>Follow the practicals in order. Each lesson explains the method, shows what to expect and provides one complete R script.</p>
+<ol class="practical-list">
+{% for practical in course.practicals %}
+<li><a href="{{ practical.href }}">{{ practical.title }}</a> <small>{{ practical.target }}</small></li>
+{% endfor %}
+</ol>
 
 <h2>Concepts for Day 1</h2>
 {% if course.id == "wui" %}
@@ -23,16 +30,6 @@ eleventyComputed:
 <p><strong>NBR</strong> compares near-infrared and shortwave infrared reflectance using <code>(NIR - SWIR) / (NIR + SWIR)</code>. Subtract post-fire NBR from pre-fire NBR to obtain dNBR. Subtract the median change in a reference ring to account for typical background change. RBR scales the corrected change by pre-fire NBR.</p>
 <p><strong>Detection</strong> groups connected pixels that exceed the rule's thresholds. Held-out background zones estimate how often the rule finds a patch away from the target. Independent thermal observations provide a second source of evidence. The Composite Burn Index field plots and the independent accuracy sample answer different questions.</p>
 {% endif %}
-
-<h2 id="practicals">Real-data practical scripts</h2>
-<p>Use one annotated R script per output folder. Open the participant project and source the script to work with the real reviewed outputs. Set <code>rebuild &lt;- TRUE</code> in a separate working copy to rerun the analysis. The remaining recipes provide smaller exercises for teaching the methods.</p>
-{% for practical in course.practicals %}
-<details>
-<summary>{{ practical.title }} · {{ practical.target }}</summary>
-<p><a class="button" href="{{ practical.path }}" download>Download practical (.R)</a></p>
-<pre><code>{{ practical.code | escape }}</code></pre>
-</details>
-{% endfor %}
 
 <h2>Preview with synthetic data</h2>
 {% if course.id == "wui" %}
@@ -52,7 +49,7 @@ eleventyComputed:
 </figure>
 <pre><code>{{ course.demo | escape }}</code></pre>
 
-<h2>Workshop scripts</h2>
+<h2>Short exercises for extra practice</h2>
 <ol class="lesson-list">
 {% for lesson in course.lessons %}
 <li><a href="{{ lesson.href }}"><span>{{ lesson.id }}</span>{{ lesson.title }}</a></li>
@@ -68,7 +65,7 @@ eleventyComputed:
 </details>
 
 <h2>Full analysis stages</h2>
-<p>Open the participant project and source <code>START_HERE.R</code>. Select the stage below and run it in the Console using a working copy. If your ZIP lacks a prerequisite, use the stage as a walkthrough with the course's reviewed outputs where available.</p>
+<p>Use the final block in the corresponding practical to replay a stage in a working copy. The commands below also work from the original individual workshop project.</p>
 {% for stage in course.stages %}
 <details>
 <summary>{{ stage[0] }} · {{ stage[1] }}</summary>

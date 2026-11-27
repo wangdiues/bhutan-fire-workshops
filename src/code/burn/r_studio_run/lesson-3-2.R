@@ -3,7 +3,12 @@
 # Numerical examples describe the workshop dataset and settings.
 
 # Load project helpers and the packaged inputs used below.
-source("r_studio_run/00_setup.R", local = TRUE)
+# Block 01: Open the shared lesson setup ----
+lesson_setup <- "thimphu_paro_burn_severity/r_studio_run/00_setup.R"
+if (!file.exists(lesson_setup)) lesson_setup <- "r_studio_run/00_setup.R"
+source(lesson_setup, local = TRUE)
+
+# Block 02: Run the short exercise and read its output ----
 
 M <- read.csv(file.path(DER, "incident_sensor_metrics.csv")); M$size <- cut(M$reported_area_ha, c(0, 1, 10, Inf), right = FALSE, labels = c("< 1 ha", "1-10 ha", ">= 10 ha"))
 for (grp in list(c("size", "size"), c("thermal_evidence", "thermal evidence"), c("sensor", "sensor"))) {
