@@ -18,7 +18,11 @@ const runs = {
 };
 
 export default function (config) {
+  let md;
+  // Each guide is rendered inside its course page (see course.njk); <id>-guide.html only redirects.
+  config.ignores.add("src/*-guide.md");
   config.amendLibrary("md", (markdown) => {
+    md = markdown;
     markdown.renderer.rules.heading_open = (tokens, index, options, env, renderer) => {
       const name = tokens[index + 1]?.content || "";
       const part = /^Part (\d+)\./.exec(name);
@@ -28,6 +32,10 @@ export default function (config) {
       return renderer.renderToken(tokens, index, options);
     };
   });
+  // Render a guide's Markdown (front matter removed) for embedding in its course page.
+  config.addFilter("guideHtml", (id) => md
+    .render(read(`./src/${id}-guide.md`).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, ""))
+    .replace(/<(\/?)h1>/g, "<$1h2>").replaceAll(`href="${id}.html#`, 'href="#'));
   const release = JSON.parse(read("./src/drive-links.json"));
   if (release.combined.url && !/^https:\/\/drive\.google\.com\//.test(release.combined.url))
     throw new Error("Use a restricted Google Drive URL for the combined package.");

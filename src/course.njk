@@ -12,7 +12,7 @@ eleventyComputed:
 <h1>{{ course.title }}</h1>
 <p class="lead">{{ course.description }}</p>
 <p><a class="button" href="{{ course.practicals[0].href }}">Start the first practical</a></p>
-<p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a> · <a href="{{ course.id }}-guide.html">Read the full workshop guide</a></p>
+<p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a> · <a href="#guide">Read the full workshop guide</a></p>
 
 <h2 id="practicals">Real-data practicals</h2>
 <p>Follow the practicals in order. Each lesson explains the method, shows what to expect and provides one complete R script.</p>
@@ -80,3 +80,7 @@ run_project("{{ stage[0] }}")</code></pre>
 <p>{{ stage[4] }}</p>
 </details>
 {% endfor %}
+
+<section id="guide" class="guide">
+{{ course.id | guideHtml | safe }}
+</section>

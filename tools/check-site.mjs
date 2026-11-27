@@ -21,7 +21,7 @@ for (const path of practicals) {
       !content.includes('data-copy="full-practical"') || (code.match(/^# Block \d{2}/gm) || []).length !== 10)
     throw new Error("The HTML must contain the full, matching ten-block script: " + path);
 }
-for (const guide of ["wui-guide.html", "burn-guide.html"]) {
+for (const guide of ["wui.html", "burn.html"]) {
   const content = readFileSync(resolve(root, guide), "utf8");
   for (let part = 1; part <= 8; part++)
     if (!content.includes(`id="part-${part}"`)) throw new Error(`Missing part ${part} in ${guide}`);
