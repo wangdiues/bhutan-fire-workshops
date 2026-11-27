@@ -16,6 +16,12 @@ const runs = {
     ["04", "Field design", "Stage 02 or reviewed starter maps, terrain and access inputs", "data/derived/field_plan and outputs/03-cbi-plan", "Use calibration plots to relate field observations to mapped change. Use the independent probability sample to estimate accuracy."]
   ]
 };
+// Guide section (heading prefix) after which each practical, or a stage without a practical, is placed.
+const guideSections = {
+  wui: { "01-sensitivity": "6.1 ", "02-calibration": "6.2 ", "03-growth": "6.3 ", "04-exposure": "6.4 ",
+    "08": "6.5 ", "05-fire-mgmt": "6.7 " },
+  burn: { "01-severity": "6.5 ", "02-recovery": "6.6 ", "03-cbi-plan": "6.7 " }
+};
 
 export default function (config) {
   let md;
@@ -32,10 +38,53 @@ export default function (config) {
       return renderer.renderToken(tokens, index, options);
     };
   });
-  // Render a guide's Markdown (front matter removed) for embedding in its course page.
-  config.addFilter("guideHtml", (id) => md
-    .render(read(`./src/${id}-guide.md`).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, ""))
-    .replace(/<(\/?)h1>/g, "<$1h2>").replaceAll(`href="${id}.html#`, 'href="#'));
+  // Split a course guide into an ordered list of segments so that course.njk can
+  // place each short exercise after the guide text that explains it, and each
+  // stage run and practical at the end of the guide section for that step.
+  config.addFilter("guideSegments", (course) => {
+    const html = md
+      .render(read(`./src/${course.id}-guide.md`).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, ""))
+      .replace(/<h1>[\s\S]*?<\/h1>\s*/, "")
+      .replaceAll(`href="${course.id}.html#`, 'href="#');
+    const headings = [...html.matchAll(/<h([2-6])(?:\s[^>]*)?>([\s\S]*?)<\/h\1>/g)].map((match) => ({
+      start: match.index, level: Number(match[1]), text: match[2].replace(/<[^>]+>/g, "").trim(),
+    }));
+    const sectionEnd = (test, what) => {
+      const index = headings.findIndex((heading) => test(heading.text));
+      if (index < 0) throw new Error(`No guide heading for ${what} in ${course.id}-guide.md`);
+      const next = headings.slice(index + 1).find((heading) => heading.level <= headings[index].level);
+      return next ? next.start : html.length;
+    };
+    const starts = (prefix) => (text) => text.startsWith(prefix);
+    const inserts = [];
+    const add = (at, segment) => inserts.push({ at, order: inserts.length, segment });
+    add(sectionEnd(starts("Part 3."), "the preview"), { type: "preview" });
+    add(sectionEnd(starts("Part 5."), "the project files"), { type: "helpers" });
+    for (const lesson of course.lessons) {
+      const pattern = new RegExp(`\\bLesson ${lesson.id.replace(".", "\\.")}\\b`);
+      const found = headings.some((heading) => pattern.test(heading.text));
+      add(sectionEnd(found ? (text) => pattern.test(text) : starts("Part 4."), "lesson " + lesson.id),
+        { type: "lesson", lesson });
+    }
+    for (const stage of course.stages) {
+      const practical = course.practicals.find((item) => item.stages[0] === stage[0]);
+      const anchor = course.guideSections[practical?.folder || stage[0]];
+      if (!anchor) throw new Error(`No guide section for stage ${stage[0]} in ${course.id}`);
+      add(sectionEnd(starts(anchor), "stage " + stage[0]), { type: "stage", stage });
+      if (practical) add(sectionEnd(starts(anchor), practical.folder), { type: "practical", practical });
+    }
+    for (const practical of course.practicals.filter((item) => !course.stages.some((stage) => stage[0] === item.stages[0])))
+      add(sectionEnd(starts(course.guideSections[practical.folder]), practical.folder), { type: "practical", practical });
+    inserts.sort((a, b) => a.at - b.at || a.order - b.order);
+    const segments = [];
+    let from = 0;
+    for (const { at, segment } of inserts) {
+      segments.push({ type: "html", html: html.slice(from, at) }, segment);
+      from = at;
+    }
+    segments.push({ type: "html", html: html.slice(from) });
+    return segments;
+  });
   const release = JSON.parse(read("./src/drive-links.json"));
   if (release.combined.url && !/^https:\/\/drive\.google\.com\//.test(release.combined.url))
     throw new Error("Use a restricted Google Drive URL for the combined package.");
@@ -49,12 +98,12 @@ export default function (config) {
   for (const line of read("./src/courses.txt").trim().split(/\r?\n/)) {
     const [id, title, description, expected, question] = line.split("|");
     if (Object.hasOwn(runs, id)) {
-      course = { id, title, description, stages: runs[id], lessons: [], release: release[id] };
+      course = { id, title, description, stages: runs[id], guideSections: guideSections[id], lessons: [], release: release[id] };
       course.demo = read(`./src/examples/${id}-demo.R`);
       course.stageFiles = readdirSync(new URL(`./src/code/${id}/scripts/`, import.meta.url));
       course.helperFiles = readdirSync(new URL(`./src/code/${id}/R/`, import.meta.url));
       course.practicals = teachingPlan.filter((practical) => practical.course === id)
-        .map((practical) => {
+        .map((practical, practicalIndex) => {
           const file = `practical-${practical.folder}.R`;
           const path = `code/${id}/r_studio_run/${file}`;
           const code = read(`./src/${path}`);
@@ -72,7 +121,7 @@ export default function (config) {
             .map(([, number, title, purpose], index) => ({ number, title, purpose, expected: expected[index] }));
           if (blocks.length !== expected.length) throw new Error("Outdated practical script: " + path);
           const anchor = `practical-${practical.folder}`;
-          return { ...practical, path, code, blocks, anchor, href: `#${anchor}`,
+          return { ...practical, path, code, blocks, anchor, href: `#${anchor}`, number: practicalIndex + 1,
             target: "outputs/" + practical.folder, courseTitle: course.title };
         });
       if (course.release.url && !/^https:\/\/drive\.google\.com\//.test(course.release.url))

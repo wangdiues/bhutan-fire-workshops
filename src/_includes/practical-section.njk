@@ -1,15 +1,15 @@
 <section class="practical" id="{{ practical.anchor }}">
-<p class="eyebrow">PRACTICAL {{ loop.index }} OF {{ course.practicals.length }}</p>
-<h3>{{ practical.title }}</h3>
+<p class="eyebrow">HANDS-ON PRACTICAL {{ practical.number }} OF {{ course.practicals.length }}</p>
+<h4>Practical {{ practical.number }}: {{ practical.title }}</h4>
 <p class="lead">Work with the real files for <code>{{ practical.target }}</code>.</p>
 <aside class="callout"><strong>Before you start</strong>
 <p>Open <code>Bhutan_Forest_Fire_Workshops.Rproj</code>. Keep this page on one side of the screen and RStudio on the other. Copy the full script into a new R Script tab. Select one numbered block at a time and press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>.</p>
 </aside>
-<h4>What are we doing?</h4>
+<h5>What are we doing?</h5>
 <p>{{ practical.method }}</p>
-<h4>Why does it matter?</h4>
+<h5>Why does it matter?</h5>
 <p>{{ practical.why }}</p>
-<h4>What data will we use?</h4>
+<h5>What data will we use?</h5>
 <dl class="file-list">
 {% for file in practical.files %}
 <dt><code>{{ file[1] }}</code></dt><dd>{{ file[2] }}</dd>
@@ -17,10 +17,10 @@
 {% if practical.extraPaths %}<dt>Training event raster</dt><dd>The change-class map identified by the project’s example settings. It is read directly from the participant ZIP.</dd>{% endif %}
 </dl>
 <p><strong>For a full replay</strong> {{ practical.rebuildInputs }}</p>
-<h4>How does it work?</h4>
+<h5>How does it work?</h5>
 <ol>{% for step in practical.steps %}<li>{{ step }}</li>{% endfor %}</ol>
 <p class="formula">{{ practical.formula }}</p>
-<h4>What do the results mean?</h4>
+<h5>What do the results mean?</h5>
 <p>{{ practical.result }}</p>
 {% for figure in practical.figures %}
 <figure class="example">
@@ -34,21 +34,21 @@
 <p>Independent accuracy · <strong>200 points</strong></p><div class="sample-bar"></div>
 </div><figcaption>Planned sample sizes from the reviewed CBI design.</figcaption></figure>
 {% endif %}
-<h4>How can Bhutan use this evidence?</h4>
-<p>{{ practical.use }} Detailed methods and worked examples are in Part {{ practical.guide }} of the workshop guide below.</p>
-<h4>Run one block at a time</h4>
+<h5>How can Bhutan use this evidence?</h5>
+<p>{{ practical.use }}</p>
+<h5>Run one block at a time</h5>
 <ol class="block-guide">
 {% for block in practical.blocks %}
 <li><strong>Block {{ block.number }} · {{ block.title }}</strong>
 <p>{{ block.purpose }}</p><p><b>What to look for</b> {{ block.expected }}</p></li>
 {% endfor %}
 </ol>
-<h4>Complete R script</h4>
+<h5>Complete R script</h5>
 <p>Paste once into <strong>File → New File → R Script</strong>. Save your copy anywhere inside the open project. The relative file paths start from the project folder.</p>
 <div class="code-tools"><button class="button" type="button" data-copy="code-{{ practical.anchor }}">Copy All Code</button>
 <a href="{{ practical.path }}" download>Download the .R file</a>
 <span class="copy-status" aria-live="polite"></span></div>
 <pre><code id="code-{{ practical.anchor }}">{{ practical.code | escape }}</code></pre>
-<h4>Explain what you found</h4>
+<h5>Explain what you found</h5>
 <p>{{ practical.question }}</p>
 </section>

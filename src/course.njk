@@ -8,80 +8,26 @@ permalink: "{{ course.id }}.html"
 eleventyComputed:
   title: "{{ course.title }}"
 ---
-<p class="eyebrow">WORKSHOP</p>
+<p class="eyebrow">WORKSHOP GUIDE AND PRACTICALS</p>
 <h1>{{ course.title }}</h1>
 <p class="lead">{{ course.description }}</p>
-<p><a class="button" href="{{ course.practicals[0].href }}">Start the first practical</a></p>
-<p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a> · <a href="#guide">Read the full workshop guide</a></p>
-<nav class="lesson-jumps" aria-label="On this page">
-<a href="#practicals">Practicals</a><a href="#concepts">Concepts</a><a href="#preview">Synthetic preview</a><a href="#exercises">Short exercises</a><a href="#stages">Full analysis stages</a><a href="#guide">Workshop guide</a>
-</nav>
-
-<h2 id="practicals">Real-data practicals</h2>
-<p>Follow the practicals in order. Each one explains the method, shows what to expect and provides one complete R script.</p>
+<p>Read from top to bottom. Parts 1–5 explain the ideas, the data and the code. Part 6 then works through the analysis one step at a time: each step explains the method, gives a short exercise for each idea, shows how to run the full stage and ends with a hands-on practical on the real data.</p>
+<p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a></p>
+<h2 id="practicals">Hands-on practicals in this guide</h2>
 <ol class="practical-list">
 {% for practical in course.practicals %}
 <li><a href="{{ practical.href }}">{{ practical.title }}</a> <small>{{ practical.target }}</small></li>
 {% endfor %}
 </ol>
-{% for practical in course.practicals %}{% include "practical-section.njk" %}{% endfor %}
 
-<h2 id="concepts">Concepts for Day 1</h2>
-{% if course.id == "wui" %}
-<p><strong>Intermix</strong> describes buildings within substantial wildland vegetation. <strong>Interface</strong> describes a developed neighbourhood close to a large wildland patch. The Thimphu benchmark adapts these concepts to a raster grid. Each 50 m cell occupies 0.0025 km². The moving window counts surrounding buildings and averages vegetation cover before a rule classifies the cell.</p>
-<p><strong>Historical fire association</strong> compares a WUI rule with proximity to recorded fire evidence. Youden J is sensitivity plus specificity minus one. Hold out one gewog at a time to see how the rule performs away from the places used to choose it. Population, walking time and susceptibility describe different parts of exposure.</p>
-{% else %}
-<p><strong>NBR</strong> compares near-infrared and shortwave infrared reflectance using <code>(NIR - SWIR) / (NIR + SWIR)</code>. Subtract post-fire NBR from pre-fire NBR to obtain dNBR. Subtract the median change in a reference ring to account for typical background change. RBR scales the corrected change by pre-fire NBR.</p>
-<p><strong>Detection</strong> groups connected pixels that exceed the rule's thresholds. Held-out background zones estimate how often the rule finds a patch away from the target. Independent thermal observations provide a second source of evidence. The Composite Burn Index field plots and the independent accuracy sample answer different questions.</p>
+<div class="guide">
+{% for segment in course | guideSegments %}
+{% if segment.type == "html" %}{{ segment.html | safe }}
+{% elif segment.type == "lesson" %}{% set lesson = segment.lesson %}{% include "lesson-section.njk" %}
+{% elif segment.type == "practical" %}{% set practical = segment.practical %}{% include "practical-section.njk" %}
+{% elif segment.type == "stage" %}{% set stage = segment.stage %}{% include "stage-section.njk" %}
+{% elif segment.type == "preview" %}{% include "preview-section.njk" %}
+{% elif segment.type == "helpers" %}{% include "helpers-section.njk" %}
 {% endif %}
-
-<h2 id="preview">Preview with synthetic data</h2>
-{% if course.id == "wui" %}
-<p>Run the script in base R. The four neighbourhoods should produce intermix, interface, other and other. Increase the distance for neighbourhood B and check its class.</p>
-{% else %}
-<p>Run the script in base R. The first pixel should show the largest corrected change. Change one reference pixel and see how the offset responds.</p>
-{% endif %}
-<p><a href="examples/{{ course.id }}-demo.R" download>Download the synthetic exercise (.R)</a></p>
-<figure class="example">
-{% if course.id == "wui" %}
-<img src="assets/wui-demo.png" width="1040" height="470" alt="Four bars show building density. A is intermix, B is interface, and C and D are other.">
-<figcaption>The dashed line marks the building density threshold. D meets it and is too far from the example vegetation patch to qualify as interface.</figcaption>
-{% else %}
-<img src="assets/burn-demo.png" width="1040" height="470" alt="The target's corrected dNBR is about 0.515. The three reference pixels are all near zero.">
-<figcaption>Reference pixels are close to zero after correction. The target retains a larger spectral change.</figcaption>
-{% endif %}
-</figure>
-<pre><code>{{ course.demo | escape }}</code></pre>
-
-<h2 id="exercises">Short exercises for extra practice</h2>
-<p>Open an exercise to see its inputs, the complete R script and the question to answer.</p>
-{% for lesson in course.lessons %}{% include "lesson-section.njk" %}{% endfor %}
-<details>
-<summary>Project launcher and shared R files</summary>
-<ul>
-<li><a href="code/{{ course.id }}/START_HERE.R" download>START_HERE.R</a></li>
-<li><a href="code/{{ course.id }}/r_studio_run/00_setup.R" download>Lesson setup</a></li>
-{% for file in course.helperFiles %}<li><a href="code/{{ course.id }}/R/{{ file }}" download>{{ file }}</a></li>{% endfor %}
-</ul>
-</details>
-
-<h2 id="stages">Full analysis stages</h2>
-<p>Use the final block in the corresponding practical to replay a stage in a working copy. The commands below also work from the original individual workshop project.</p>
-{% for stage in course.stages %}
-<details>
-<summary>{{ stage[0] }} · {{ stage[1] }}</summary>
-<p><strong>Requires</strong> {{ stage[2] }}</p>
-{% for file in course.stageFiles %}
-{% if file.startsWith(stage[0]) %}<p><a href="code/{{ course.id }}/scripts/{{ file }}" download>Download {{ file }}</a></p>{% endif %}
 {% endfor %}
-<pre><code>check_project("{{ stage[0] }}")
-# Run only after preflight passes.
-run_project("{{ stage[0] }}")</code></pre>
-<p><strong>Outputs</strong> <code>{{ stage[3] }}</code>. Read the Console for the full path to the stage log.</p>
-<p>{{ stage[4] }}</p>
-</details>
-{% endfor %}
-
-<section id="guide" class="guide">
-{{ course.id | guideHtml | safe }}
-</section>
+</div>

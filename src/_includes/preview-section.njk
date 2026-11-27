@@ -1,0 +1,23 @@
+<section class="recap" id="preview">
+<h3>Recap and warm-up with synthetic data</h3>
+{% if course.id == "wui" %}
+<p><strong>Intermix</strong> describes buildings within substantial wildland vegetation. <strong>Interface</strong> describes a developed neighbourhood close to a large wildland patch. The Thimphu benchmark adapts these concepts to a raster grid. Each 50 m cell occupies 0.0025 km². The moving window counts surrounding buildings and averages vegetation cover before a rule classifies the cell.</p>
+<p><strong>Historical fire association</strong> compares a WUI rule with proximity to recorded fire evidence. Youden J is sensitivity plus specificity minus one. Hold out one gewog at a time to see how the rule performs away from the places used to choose it. Population, walking time and susceptibility describe different parts of exposure.</p>
+<p>Run the script in base R. The four neighbourhoods should produce intermix, interface, other and other. Increase the distance for neighbourhood B and check its class.</p>
+{% else %}
+<p><strong>NBR</strong> compares near-infrared and shortwave infrared reflectance using <code>(NIR - SWIR) / (NIR + SWIR)</code>. Subtract post-fire NBR from pre-fire NBR to obtain dNBR. Subtract the median change in a reference ring to account for typical background change. RBR scales the corrected change by pre-fire NBR.</p>
+<p><strong>Detection</strong> groups connected pixels that exceed the rule's thresholds. Held-out background zones estimate how often the rule finds a patch away from the target. Independent thermal observations provide a second source of evidence. The Composite Burn Index field plots and the independent accuracy sample answer different questions.</p>
+<p>Run the script in base R. The first pixel should show the largest corrected change. Change one reference pixel and see how the offset responds.</p>
+{% endif %}
+<p><a href="examples/{{ course.id }}-demo.R" download>Download the synthetic exercise (.R)</a></p>
+<figure class="example">
+{% if course.id == "wui" %}
+<img src="assets/wui-demo.png" width="1040" height="470" alt="Four bars show building density. A is intermix, B is interface, and C and D are other.">
+<figcaption>The dashed line marks the building density threshold. D meets it and is too far from the example vegetation patch to qualify as interface.</figcaption>
+{% else %}
+<img src="assets/burn-demo.png" width="1040" height="470" alt="The target's corrected dNBR is about 0.515. The three reference pixels are all near zero.">
+<figcaption>Reference pixels are close to zero after correction. The target retains a larger spectral change.</figcaption>
+{% endif %}
+</figure>
+<pre><code>{{ course.demo | escape }}</code></pre>
+</section>

@@ -84,3 +84,7 @@ kbd { border: 1px solid var(--line); background: white; border-radius: .2rem; pa
 .practical { margin-top: 2.5rem; padding-top: 1rem; border-top: 2px solid var(--line); }
 .practical h4 { margin-top: 1.4rem; }
 .lesson pre { margin-top: .6rem; }
+.guide h5 { margin: 1.2rem 0 .3rem; font-size: 1rem; }
+.practical { padding: 1rem 1.1rem; border: 2px solid var(--line); border-radius: .5rem; }
+.recap { margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--line); }
+.lesson summary, .stage summary { color: var(--teal); }
