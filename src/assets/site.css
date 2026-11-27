@@ -32,6 +32,14 @@ a { color: var(--teal); text-underline-offset: .2em; }
 .example { max-width: 47rem; margin: 1rem 0 2rem; }
 .example img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
 figcaption { margin-top: .55rem; color: var(--dim); }
+.guide img { display: block; max-width: min(100%, 52rem); height: auto; }
+.guide table { display: block; overflow-x: auto; border-collapse: collapse; }
+.guide th, .guide td { padding: .55rem .7rem; border: 1px solid var(--line); text-align: left; }
+.guide th { background: #eaf0e6; }
+.guide h3 { margin-top: 1.6rem; }
+.guide blockquote { margin-inline: 0; padding-inline: 1rem; border-inline-start: .25rem solid var(--line); }
+.guide code { overflow-wrap: anywhere; }
+.guide pre code { overflow-wrap: normal; }
 pre { overflow: auto; padding: 1.1rem; margin-top: 0; border: 1px solid #204438; background: #182f29; color: #f5f7e9; line-height: 1.6; }
 code { font-family: ui-monospace, Consolas, monospace; }
 p code, dd code { overflow-wrap: anywhere; }

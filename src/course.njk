@@ -12,7 +12,8 @@ eleventyComputed:
 <h1>{{ course.title }}</h1>
 <p class="lead">{{ course.description }}</p>
 <p><strong>Day 1</strong> · RStudio, datasets and concepts<br><strong>Day 2</strong> · Run recipes, replay available stages and interpret maps</p>
-<p><a href="setup.html">Set up RStudio</a> · <a href="downloads.html">Get the participant ZIP</a></p>
+<p><a class="button" href="{{ course.id }}-guide.html">Read the full workshop guide</a></p>
+<p><a href="setup.html">Set up RStudio</a> · <a href="downloads.html">Get the real-data participant ZIP</a> · <a href="#practicals">Go to practical scripts</a></p>
 
 <h2>Concepts for Day 1</h2>
 {% if course.id == "wui" %}
@@ -23,7 +24,17 @@ eleventyComputed:
 <p><strong>Detection</strong> groups connected pixels that exceed the rule's thresholds. Held-out background zones estimate how often the rule finds a patch away from the target. Independent thermal observations provide a second source of evidence. The Composite Burn Index field plots and the independent accuracy sample answer different questions.</p>
 {% endif %}
 
-<h2>Try it with synthetic data</h2>
+<h2 id="practicals">Real-data practical scripts</h2>
+<p>Use one annotated R script per output folder. Open the participant project and source the script to work with the real reviewed outputs. Set <code>rebuild &lt;- TRUE</code> in a separate working copy to rerun the analysis. The remaining recipes provide smaller exercises for teaching the methods.</p>
+{% for practical in course.practicals %}
+<details>
+<summary>{{ practical.title }} · {{ practical.target }}</summary>
+<p><a class="button" href="{{ practical.path }}" download>Download practical (.R)</a></p>
+<pre><code>{{ practical.code | escape }}</code></pre>
+</details>
+{% endfor %}
+
+<h2>Preview with synthetic data</h2>
 {% if course.id == "wui" %}
 <p>Run the script in base R. The four neighbourhoods should produce intermix, interface, other and other. Increase the distance for neighbourhood B and check its class.</p>
 {% else %}

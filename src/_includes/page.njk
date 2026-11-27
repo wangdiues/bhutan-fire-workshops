@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ title | escape }} · FIRE–BHUTAN</title>
-<link rel="stylesheet" href="assets/site.css?v=1.1">
+<link rel="stylesheet" href="assets/site.css?v=1.2">
 <script defer src="assets/site.js"></script>
 </head>
 <body>
@@ -16,7 +16,7 @@
 <a href="burn.html">Burn severity</a>
 <a href="downloads.html">Downloads</a>
 </nav></header>
-<main id="main">{{ content | safe }}</main>
+<main id="main"{% if guide %} class="guide"{% endif %}>{{ content | safe }}</main>
 <footer>Bhutan forest fire workshops · RStudio training</footer>
 </body>
 </html>

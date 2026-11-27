@@ -29,6 +29,7 @@ check_project <- function(stages = NULL) {
   if (is.unsorted(match(stages, names(spec$stages)))) stop("Supply stages in dependency order.")
   packages <- spec$packages
   if (any(stages %in% c("15", "16"))) packages <- c(packages, "lpSolve", "lwgeom")
+  if ("16" %in% stages) packages <- c(packages, "ggnewscale")
   if ("17" %in% stages) packages <- c(packages, "zip")
   installed <- rownames(installed.packages())
   missing_packages <- setdiff(packages, installed)

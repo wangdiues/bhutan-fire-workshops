@@ -17,6 +17,16 @@ const runs = {
 };
 
 export default function (config) {
+  config.amendLibrary("md", (markdown) => {
+    markdown.renderer.rules.heading_open = (tokens, index, options, env, renderer) => {
+      const name = tokens[index + 1]?.content || "";
+      const part = /^Part (\d+)\./.exec(name);
+      const id = part ? "part-" + part[1] : name === "Glossary" ? "glossary" :
+        name.startsWith("Key references") ? "references" : "";
+      if (id) tokens[index].attrSet("id", id);
+      return renderer.renderToken(tokens, index, options);
+    };
+  });
   const release = JSON.parse(read("./src/drive-links.json"));
   const courses = [];
   let course;
@@ -27,6 +37,14 @@ export default function (config) {
       course.demo = read(`./src/examples/${id}-demo.R`);
       course.stageFiles = readdirSync(new URL(`./src/code/${id}/scripts/`, import.meta.url));
       course.helperFiles = readdirSync(new URL(`./src/code/${id}/R/`, import.meta.url));
+      course.practicals = readdirSync(new URL(`./src/code/${id}/r_studio_run/`, import.meta.url))
+        .filter((file) => file.startsWith("practical-"))
+        .map((file) => {
+          const path = `code/${id}/r_studio_run/${file}`;
+          const code = read(`./src/${path}`);
+          const [title, target] = code.split("\n")[0].slice(2).split(" | ");
+          return { path, code, title, target };
+        });
       if (course.release.url && !/^https:\/\/drive\.google\.com\//.test(course.release.url))
         throw new Error(`Use a Google Drive link for ${id} in drive-links.json.`);
       courses.push(course);
@@ -48,7 +66,8 @@ export default function (config) {
   config.addGlobalData("courses", courses);
   config.addGlobalData("lessons", lessons);
   config.addPassthroughCopy("src/assets");
-  config.addPassthroughCopy("src/code");
+  config.addPassthroughCopy("src/code/**/*.R");
+  config.addPassthroughCopy("src/code/**/*.Rproj");
   config.addPassthroughCopy("src/examples");
   for (const file of ["src/courses.txt", "src/drive-links.json", "src/code/**/*.R", "src/examples/*.R"])
     config.addWatchTarget(file);
