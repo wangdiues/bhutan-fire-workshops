@@ -1,0 +1,12 @@
+<details class="lesson" id="{{ lesson.anchor }}">
+<summary>{{ lesson.id }} · {{ lesson.title }}</summary>
+<dl>
+<dt>Inputs</dt><dd>{{ lesson.inputs }}</dd>
+<dt>Look for</dt><dd>{{ lesson.expected }}</dd>
+</dl>
+<p>Open <code>{{ lesson.filename }}</code> in RStudio. Run the setup and then each block in order.</p>
+<div class="code-tools"><button class="button" type="button" data-copy="code-{{ lesson.anchor }}">Copy All Code</button>
+<a href="{{ lesson.script }}" download>Download R script</a><span class="copy-status" aria-live="polite"></span></div>
+<pre><code id="code-{{ lesson.anchor }}">{{ lesson.code | escape }}</code></pre>
+<p><strong>Interpret the result</strong> {{ lesson.question }}</p>
+</details>

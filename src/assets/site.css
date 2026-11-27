@@ -81,3 +81,6 @@ footer { color: var(--dim); font-size: .9rem; padding-block: 1.3rem; border-top:
 .screen-plan div + div { background: #f3e8dc; }
 .screen-plan p { margin: .3rem 0 0; }
 kbd { border: 1px solid var(--line); background: white; border-radius: .2rem; padding: .02em .24em; }
+.practical { margin-top: 2.5rem; padding-top: 1rem; border-top: 2px solid var(--line); }
+.practical h4 { margin-top: 1.4rem; }
+.lesson pre { margin-top: .6rem; }

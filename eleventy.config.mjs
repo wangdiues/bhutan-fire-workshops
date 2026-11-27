@@ -19,7 +19,7 @@ const runs = {
 
 export default function (config) {
   let md;
-  // Each guide is rendered inside its course page (see course.njk); <id>-guide.html only redirects.
+  // Practicals, short exercises and the guide are all rendered inside each course page (course.njk).
   config.ignores.add("src/*-guide.md");
   config.amendLibrary("md", (markdown) => {
     md = markdown;
@@ -71,7 +71,8 @@ export default function (config) {
           const blocks = [...code.matchAll(/^# Block (\d{2}): (.+?) ----\r?\n# (.+)$/gm)]
             .map(([, number, title, purpose], index) => ({ number, title, purpose, expected: expected[index] }));
           if (blocks.length !== expected.length) throw new Error("Outdated practical script: " + path);
-          return { ...practical, path, code, blocks, href: `${id}-practical-${practical.folder}.html`,
+          const anchor = `practical-${practical.folder}`;
+          return { ...practical, path, code, blocks, anchor, href: `#${anchor}`,
             target: "outputs/" + practical.folder, courseTitle: course.title };
         });
       if (course.release.url && !/^https:\/\/drive\.google\.com\//.test(course.release.url))
@@ -79,10 +80,11 @@ export default function (config) {
       courses.push(course);
     } else {
       const filename = `lesson-${id.replace(".", "-")}.R`;
-      const href = `${course.id}-${id.replace(".", "-")}.html`;
+      const anchor = `lesson-${id.replace(".", "-")}`;
+      const href = `#${anchor}`;
       const script = `code/${course.id}/r_studio_run/${filename}`;
       const code = read(`./src/${script}`);
-      course.lessons.push({ id, title, inputs: description, expected, question, href, script, code, filename });
+      course.lessons.push({ id, anchor, title, inputs: description, expected, question, href, script, code, filename });
     }
   }
   const lessons = courses.flatMap((currentCourse) => currentCourse.lessons.map((lesson, index) => ({

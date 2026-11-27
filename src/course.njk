@@ -13,16 +13,20 @@ eleventyComputed:
 <p class="lead">{{ course.description }}</p>
 <p><a class="button" href="{{ course.practicals[0].href }}">Start the first practical</a></p>
 <p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a> · <a href="#guide">Read the full workshop guide</a></p>
+<nav class="lesson-jumps" aria-label="On this page">
+<a href="#practicals">Practicals</a><a href="#concepts">Concepts</a><a href="#preview">Synthetic preview</a><a href="#exercises">Short exercises</a><a href="#stages">Full analysis stages</a><a href="#guide">Workshop guide</a>
+</nav>
 
 <h2 id="practicals">Real-data practicals</h2>
-<p>Follow the practicals in order. Each lesson explains the method, shows what to expect and provides one complete R script.</p>
+<p>Follow the practicals in order. Each one explains the method, shows what to expect and provides one complete R script.</p>
 <ol class="practical-list">
 {% for practical in course.practicals %}
 <li><a href="{{ practical.href }}">{{ practical.title }}</a> <small>{{ practical.target }}</small></li>
 {% endfor %}
 </ol>
+{% for practical in course.practicals %}{% include "practical-section.njk" %}{% endfor %}
 
-<h2>Concepts for Day 1</h2>
+<h2 id="concepts">Concepts for Day 1</h2>
 {% if course.id == "wui" %}
 <p><strong>Intermix</strong> describes buildings within substantial wildland vegetation. <strong>Interface</strong> describes a developed neighbourhood close to a large wildland patch. The Thimphu benchmark adapts these concepts to a raster grid. Each 50 m cell occupies 0.0025 km². The moving window counts surrounding buildings and averages vegetation cover before a rule classifies the cell.</p>
 <p><strong>Historical fire association</strong> compares a WUI rule with proximity to recorded fire evidence. Youden J is sensitivity plus specificity minus one. Hold out one gewog at a time to see how the rule performs away from the places used to choose it. Population, walking time and susceptibility describe different parts of exposure.</p>
@@ -31,7 +35,7 @@ eleventyComputed:
 <p><strong>Detection</strong> groups connected pixels that exceed the rule's thresholds. Held-out background zones estimate how often the rule finds a patch away from the target. Independent thermal observations provide a second source of evidence. The Composite Burn Index field plots and the independent accuracy sample answer different questions.</p>
 {% endif %}
 
-<h2>Preview with synthetic data</h2>
+<h2 id="preview">Preview with synthetic data</h2>
 {% if course.id == "wui" %}
 <p>Run the script in base R. The four neighbourhoods should produce intermix, interface, other and other. Increase the distance for neighbourhood B and check its class.</p>
 {% else %}
@@ -49,12 +53,9 @@ eleventyComputed:
 </figure>
 <pre><code>{{ course.demo | escape }}</code></pre>
 
-<h2>Short exercises for extra practice</h2>
-<ol class="lesson-list">
-{% for lesson in course.lessons %}
-<li><a href="{{ lesson.href }}"><span>{{ lesson.id }}</span>{{ lesson.title }}</a></li>
-{% endfor %}
-</ol>
+<h2 id="exercises">Short exercises for extra practice</h2>
+<p>Open an exercise to see its inputs, the complete R script and the question to answer.</p>
+{% for lesson in course.lessons %}{% include "lesson-section.njk" %}{% endfor %}
 <details>
 <summary>Project launcher and shared R files</summary>
 <ul>
@@ -64,7 +65,7 @@ eleventyComputed:
 </ul>
 </details>
 
-<h2>Full analysis stages</h2>
+<h2 id="stages">Full analysis stages</h2>
 <p>Use the final block in the corresponding practical to replay a stage in a working copy. The commands below also work from the original individual workshop project.</p>
 {% for stage in course.stages %}
 <details>

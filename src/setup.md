@@ -57,7 +57,7 @@ Open **01_Install_Workshop_Packages.R** in RStudio while online and click **Sour
 
 A line beginning with `#` is a note. In `year <- 2025`, the arrow stores 2025 under the name `year`. In `terra::rast()`, the double colon tells R to use the `rast()` tool from the terra package.
 
-<p class="links"><a class="button" href="wui-practical-01-sensitivity.html">Start Thimphu WUI</a> <a class="button" href="burn-practical-01-severity.html">Start Burn Severity</a></p>
+<p class="links"><a class="button" href="wui.html#practicals">Start Thimphu WUI</a> <a class="button" href="burn.html#practicals">Start Burn Severity</a></p>
 
 ## If you get stuck
 
