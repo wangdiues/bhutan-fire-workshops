@@ -20,7 +20,7 @@ for (const file of files) {
   if (ext !== ".html") continue;
   for (const [, link] of content.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
     if (/^(https:\/\/|#)/.test(link)) continue;
-    if (link.startsWith("/") || !existsSync(resolve(dirname(path), link.split("#")[0])))
+    if (link.startsWith("/") || !existsSync(resolve(dirname(path), link.split(/[?#]/)[0])))
       throw new Error(`Broken or absolute local link: ${file} → ${link}`);
   }
 }
