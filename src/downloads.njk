@@ -4,7 +4,7 @@ title: Workshop downloads
 permalink: downloads.html
 ---
 <h1>Get the workshop project</h1>
-<p>One ZIP contains both workshops, the installer, real datasets, reviewed results and an offline copy of these lessons.</p>
+<p>Each workshop ZIP contains two folders: <code>data</code> with the workshop datasets and <code>scripts</code> with <code>00_setup.R</code> and the practical scripts.</p>
 <p>Combined project · v{{ participantPackage.version }} · <code>{{ participantPackage.filename }}</code></p>
 {% if participantPackage.url %}
 <p><a class="button" href="{{ participantPackage.url | escape }}">Open the project ZIP in Google Drive</a></p>
@@ -12,7 +12,7 @@ permalink: downloads.html
 <p>Request the combined project ZIP from the workshop organizer. The restricted Google Drive link has yet to be added.</p>
 {% endif %}
 <h2>Open the project</h2>
-<p>Extract the entire ZIP and open <code>Bhutan_Forest_Fire_Workshops.Rproj</code>. For offline lessons, open <code>lessons/index.html</code> in a browser. If Drive asks for access, sign in with your registered account.</p>
+<p>Extract the entire ZIP, keep <code>data</code> and <code>scripts</code> together, and open a script from <code>scripts</code> in RStudio. If Drive asks for access, sign in with your registered account.</p>
 <p><a class="button" href="setup.html">Follow the one-time setup</a></p>
 {% for course in courses %}
 {% if course.release.url %}

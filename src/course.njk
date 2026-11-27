@@ -11,7 +11,7 @@ eleventyComputed:
 <p class="eyebrow">WORKSHOP GUIDE AND PRACTICALS</p>
 <h1>{{ course.title }}</h1>
 <p class="lead">{{ course.description }}</p>
-<p>Read from top to bottom. Parts 1–5 explain the ideas, the data and the code. Part 6 then works through the analysis one step at a time: each step explains the method, gives a short exercise for each idea, shows how to run the full stage and ends with a hands-on practical on the real data.</p>
+<p>Read from top to bottom. Parts 1–5 explain the ideas, the data and the code. Part 6 then works through the analysis one step at a time: each step explains the method and ends with a hands-on practical on the real data.</p>
 <p><a href="setup.html">Set up RStudio once</a> · <a href="downloads.html">Get the combined project</a></p>
 <h2 id="practicals">Hands-on practicals in this guide</h2>
 <ol class="practical-list">
@@ -23,11 +23,8 @@ eleventyComputed:
 <div class="guide">
 {% for segment in course | guideSegments %}
 {% if segment.type == "html" %}{{ segment.html | safe }}
-{% elif segment.type == "lesson" %}{% set lesson = segment.lesson %}{% include "lesson-section.njk" %}
 {% elif segment.type == "practical" %}{% set practical = segment.practical %}{% include "practical-section.njk" %}
-{% elif segment.type == "stage" %}{% set stage = segment.stage %}{% include "stage-section.njk" %}
 {% elif segment.type == "preview" %}{% include "preview-section.njk" %}
-{% elif segment.type == "helpers" %}{% include "helpers-section.njk" %}
 {% endif %}
 {% endfor %}
 </div>

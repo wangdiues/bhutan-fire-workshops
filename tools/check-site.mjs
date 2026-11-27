@@ -28,17 +28,12 @@ for (const path of practicals) {
     throw new Error("The workshop page must contain the full, matching ten-block script: " + path);
 }
 
-// Every short-exercise script appears in full, with its download and question.
-const exercises = files.filter((file) => /r_studio_run[\\/]lesson-\d-\d\.R$/.test(file));
-if (exercises.length !== 33) throw new Error(`Expected 33 short-exercise scripts. Found ${exercises.length}.`);
-for (const path of exercises) {
-  const [, course, number] = /code[\\/](wui|burn)[\\/]r_studio_run[\\/]lesson-(\d-\d)\.R$/.exec(path);
-  const content = readFileSync(resolve(root, `${course}.html`), "utf8");
-  const section = content.match(new RegExp(`<details class="lesson" id="lesson-${number}">([\\s\\S]*?)</details>`))?.[1];
-  if (!same(shownCode(section, `code-lesson-${number}`), readFileSync(resolve(root, path), "utf8")) ||
-      !section.includes("Download R script") || !section.includes("Interpret the result"))
-    throw new Error("Incomplete short exercise: " + path);
-}
+// Participants get only 00_setup.R and the practical scripts for each workshop.
+const scripts = files.filter((file) => file.endsWith(".R") && !/^examples[\\/]/.test(file));
+for (const file of scripts)
+  if (!/^code[\\/](wui|burn)[\\/]r_studio_run[\\/](00_setup|practical-\d{2}-[a-z-]+)\.R$/.test(file))
+    throw new Error("Only 00_setup.R and practical scripts may be published: " + file);
+if (scripts.length !== 10) throw new Error(`Expected 10 workshop scripts. Found ${scripts.length}.`);
 
 for (const guide of coursePages) {
   const content = readFileSync(resolve(root, guide), "utf8");
@@ -51,7 +46,7 @@ for (const file of files) {
   const ext = extname(file);
   if (["assets/wui-demo.png", "assets/burn-demo.png"].includes(file.replaceAll("\\", "/"))) continue;
   if (/^assets\/(wui|burn)\/fig_\d{2}_[a-z0-9_]+\.png$/.test(file.replaceAll("\\", "/"))) continue;
-  if (![".html", ".R", ".Rproj", ".css", ".js"].includes(ext))
+  if (![".html", ".R", ".css", ".js"].includes(ext))
     throw new Error("Unexpected file in the public artifact: " + file);
   const content = readFileSync(path, "utf8");
   if (/DOFPS_\d{4}_[A-Z0-9]+|(?:[A-Z]:[\\/](?:Users|20\d{2}))/i.test(content))
@@ -68,4 +63,4 @@ for (const file of files) {
       throw new Error(`Broken or absolute local link: ${file} → ${link}`);
   }
 }
-console.log(`Verified ${html.length} pages, ${practicals.length} practicals, ${exercises.length} short exercises and all links.`);
+console.log(`Verified ${html.length} pages, ${practicals.length} practicals, ${scripts.length} workshop scripts and all links.`);

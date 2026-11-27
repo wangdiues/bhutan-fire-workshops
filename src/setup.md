@@ -5,38 +5,32 @@ permalink: setup.html
 ---
 # Set up RStudio once
 
-## 1. Extract and open the project
+## 1. Install R and get the workshop folder
 
 1. Install [R](https://cran.r-project.org/) and [RStudio Desktop](https://posit.co/download/rstudio-desktop/). R does the calculations. RStudio gives you an editor, a Console for messages and a Plots pane.
-2. [Get the combined participant ZIP](downloads.html) and extract it to a local folder you can write to. On Windows, right-click the ZIP and choose **Extract All**.
-3. Double-click **Bhutan_Forest_Fire_Workshops.Rproj** in the extracted folder. Its name appears in the upper-right corner of RStudio. Opening it sets the starting folder for all relative paths.
+2. [Get the workshop ZIP](downloads.html) and extract it to a local folder you can write to. On Windows, right-click the ZIP and choose **Extract All**.
 
-<pre><code>Bhutan Forest Fire Workshops/
-  Bhutan_Forest_Fire_Workshops.Rproj
-  01_Install_Workshop_Packages.R
-  lessons/index.html
-  thimphu_WUI/
-    data/  outputs/  r_studio_run/
-  thimphu_paro_burn_severity/
-    data/  outputs/  r_studio_run/</code></pre>
+<pre><code>Thimphu_WUI_Workshop/
+  data/       the workshop data files
+  scripts/    00_setup.R and the practical scripts</code></pre>
 
-Both workshops use this project. Keep the folders together so the scripts can find their files.
+Keep `data` and `scripts` side by side in the same folder. The scripts find the data from there.
 
 ## 2. Install the packages
 
-Open **01_Install_Workshop_Packages.R** in RStudio while online and click **Source** once. The script installs only missing packages. A successful run ends with **Setup complete. All workshop packages are ready.**
+While online, run this once in the RStudio Console. It installs only the packages that are missing.
 
-<div class="code-tools"><button class="button" type="button" data-copy="install-code">Copy All Code</button>
-<a href="start/01_Install_Workshop_Packages.R" download>Download the installer (.R)</a><span class="copy-status" aria-live="polite"></span></div>
-<pre><code id="install-code">{{ installer | escape }}</code></pre>
+<div class="code-tools"><button class="button" type="button" data-copy="install-code">Copy All Code</button><span class="copy-status" aria-live="polite"></span></div>
+<pre><code id="install-code">packages &lt;- c("jsonlite", "openxlsx", "terra")
+missing &lt;- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
+if (length(missing)) install.packages(missing, repos = "https://cloud.r-project.org")
+message("All workshop packages are ready.")</code></pre>
 
-<details><summary>What each package does</summary>
 <dl class="file-list">
-{% for package in packageDescriptions %}
-<dt><code>{{ package.name }}</code></dt><dd>{{ package.description }}</dd>
-{% endfor %}
+<dt><code>jsonlite</code></dt><dd>Reads the reviewed result summaries (.json).</dd>
+<dt><code>openxlsx</code></dt><dd>Reads the reviewed result tables (.xlsx).</dd>
+<dt><code>terra</code></dt><dd>Reads and plots the maps (.tif).</dd>
 </dl>
-</details>
 
 ## 3. Run your first practical
 
@@ -61,9 +55,8 @@ A line beginning with `#` is a note. In `year <- 2025`, the arrow stores 2025 un
 
 ## If you get stuck
 
-- **R cannot find a file.** Reopen the extracted `.Rproj` and keep the folder structure together.
-- **R reports a missing package.** Run the one-time installer online. If an installed package cannot load, copy the package name and error into your workshop help request.
+- **R cannot find a file.** In RStudio choose **Session → Set Working Directory → To Source File Location** with a script from `scripts` open, and keep `data` beside `scripts`.
+- **R reports a missing package.** Run the install code in step 2 while online. If an installed package cannot load, copy the package name and error into your workshop help request.
 - **Copy All Code selects the code instead.** Press Ctrl+C, or download and open the complete `.R` file.
-- **The original analysis is slow.** Complete Blocks 01–09 from the reviewed results. Block 10 replays the original analysis and writes a log. Use a separate project copy for replay.
 
-[RStudio projects](https://docs.posit.co/ide/user/ide/guide/code/projects.html) · [Run selected code](https://docs.posit.co/ide/user/ide/guide/code/execution.html)
+[Run selected code](https://docs.posit.co/ide/user/ide/guide/code/execution.html)
