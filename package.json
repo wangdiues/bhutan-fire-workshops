@@ -1,0 +1,12 @@
+{
+  "name": "bhutan-fire-workshops",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "test": "node tools/check-site.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.8"
+  }
+}

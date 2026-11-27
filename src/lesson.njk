@@ -1,0 +1,26 @@
+---
+pagination:
+  data: lessons
+  size: 1
+  alias: lesson
+layout: page.njk
+permalink: "{{ lesson.href }}"
+eleventyComputed:
+  title: "{{ lesson.title }}"
+---
+<p class="eyebrow"><a href="{{ lesson.courseId }}.html">{{ lesson.courseTitle }}</a></p>
+<h1>{{ lesson.id }} · {{ lesson.title }}</h1>
+<dl>
+<dt>Inputs</dt><dd>{{ lesson.inputs }}</dd>
+<dt>Look for</dt><dd>{{ lesson.expected }}</dd>
+</dl>
+<p>Open <code>{{ lesson.filename }}</code> in RStudio. Run the setup and then each block in order.</p>
+<p><a class="button" href="{{ lesson.script }}" download>Download R script</a></p>
+<pre><code>{{ lesson.code | escape }}</code></pre>
+<h2>Interpret the result</h2>
+<p>{{ lesson.question }}</p>
+<nav class="pager" aria-label="Lesson navigation">
+{% if lesson.previous %}<a href="{{ lesson.previous }}">← Previous lesson</a>{% endif %}
+<a href="{{ lesson.courseId }}.html">All lessons</a>
+{% if lesson.next %}<a href="{{ lesson.next }}">Next lesson →</a>{% endif %}
+</nav>

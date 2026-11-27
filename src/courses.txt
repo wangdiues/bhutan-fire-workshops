@@ -1,0 +1,35 @@
+wui|Thimphu Wildland–Urban Interface|Map where settlements and wildland vegetation meet, then compare past fire, settlement change and exposure.
+1.1|Packaged data|Grid, building, fire evidence, road and land-cover inputs|Grid dimensions and a layer inventory|Why does the grid include a buffer outside Thimphu?
+2.1|Count buildings|Grid and building footprints|Counts per cell and a city-window map|Why filter the footprint confidence before counting?
+2.2|Neighbourhood density|Grid, footprints and building-count raster|Density at 250, 500 and 1,000 m|Why can the same density threshold require different counts?
+2.3|Vegetation cover|Grid, footprints and vegetation-share raster|Three vegetation-cover maps|Which definition includes grass, and how might it change the map?
+2.4|Vegetation patches|Grid, footprints and vegetation-share raster|Patch areas and distance in metres|What happens to patch size if diagonal cells cannot connect?
+2.5|Structural classes|Grid, footprints, WUI layers and settings|Maps for two WUI rules|Where do interface and intermix differ on the map?
+3.1|Distance to past fire|Grid, footprints, gewog raster and fire evidence|Distance distribution and number of nearby buildings|What could make a fire absent from the evidence layers?
+3.2|Confusion matrix|Same inputs as 3.1 plus WUI layers|Counts and Youden J for two rules|Which rule trades sensitivity for specificity?
+3.3|Sensitivity to distance|Calibration rule table|Youden J across distance thresholds|When does increasing distance stop improving discrimination?
+3.4|Hold out a gewog|Same inputs as 3.1 plus WUI layers|Held-out scores by gewog|Why make the split by gewog?
+3.5|Bootstrap by gewog|Same inputs as 3.1 plus WUI layers|Bootstrap interval for Youden J|Why resample geographic units?
+4.1|Dynamic World shares|Grid and annual Dynamic World rasters|Land-cover area and observation count by year|Why inspect valid observations before comparing years?
+4.2|Built-share threshold|Grid, annual 2023 raster and WUI layers|Agreement and kappa by threshold|Why report agreement alongside kappa?
+4.3|Settlement proxy trend|Annual WUI CSV|Median pairwise slope and Kendall's tau|What does an upward proxy trend measure?
+4.4|Three-year majority|WUI change raster|Toy classification and mapped cell counts|How does a single noisy year affect the majority?
+5.1|Building and population exposure|WUI GeoPackage, grid, class raster and population raster|Building counts and estimated population|Why interpret population as an estimate?
+5.2|Gewog rankings|Exposure-by-gewog CSV|Component ranks and average rank|What happens if you remove one of the indicators?
+5.3|Blind field sample|Synthetic points built by the script|Balanced sample and observer form without mapped labels|Which columns should only the analyst see?
+burn|Paro–Thimphu Burn Severity|Detect spectral change, compare evidence across sensors and design field checks.
+1.1|Packaged data|Incident CSV, inventory, terrain and annual imagery|Incident counts, image coverage and raster inventory|Why are some reported events absent from the imagery inventory?
+2.1|Before and after|Example-event configuration, imagery, metadata and incident table|Pre-fire NBR, post-fire NBR and dNBR maps|Which map shows the direction of change?
+2.2|Pixel masks|Example-event imagery, incident table and terrain raster|Illumination and usable-pixel maps|How does masking affect the area that can be analysed?
+2.3|Reference ring and indices|Same inputs as 2.2|Ring offset and corrected dNBR, RBR and RdNBR|Why does RdNBR change sharply as pre-fire NBR approaches zero?
+2.4|Detect patches|Same inputs as 2.2 plus severity summary and metrics|Candidate, seed and grown patch maps|How does the minimum patch area affect detection?
+2.5|Placebo zones|Same inputs as 2.2 plus severity summary|Usable background zones and detection counts|Why evaluate on zones held out from rule selection?
+2.6|Thermal evidence|Same inputs as 2.2 plus FIRMS and MCD64A1 tables|Thermal and burned-pixel counts near the example|Why might a small fire have no thermal detection?
+3.1|Choose a rule|Rule comparison workbook and severity summary|Candidate rules and background detection rates|Which rate comes from data held out of selection?
+3.2|Detection by fire size|Incident–sensor metrics CSV|Detection proportions, intervals and odds ratios|Which groups have the widest intervals?
+3.3|Compare sensors|Burn GeoPackage, example configuration and severity summary|Intersection, union and Jaccard overlap|Can sensors agree on detection and still map different patches?
+3.4|Provisional area|Area-range workbook and severity summary|Mapped area by analysis choice|Why report a range across analysis choices?
+4.1|Spectral trajectory|Burn GeoPackage, annual Landsat NBR and trajectory example setting|Year-by-year patch, ring and baseline-adjusted NBR|Why compare the patch with a reference ring each year?
+4.2|Mixed models|Incident-year trajectory workbook|Sample size and observed and modelled means by year|Why does following the same incidents matter?
+5.1|Calibration plot neighbourhoods|Example severity raster, example configuration and calibration sample|Candidate-pixel purity and sample counts|Why choose homogeneous neighbourhoods for calibration?
+5.2|Accuracy and adjusted area|Accuracy-sample table and synthetic field responses|Inclusion probabilities and worked area estimates|Why weight estimates by stratum area?

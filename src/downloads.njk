@@ -1,0 +1,19 @@
+---
+layout: page.njk
+title: Workshop downloads
+permalink: downloads.html
+---
+<h1>Workshop downloads</h1>
+<p>The teaching pages and R code are public. Workshop data are shared with approved participants through Google Drive.</p>
+{% for course in courses %}
+<h2>{{ course.title }}</h2>
+<p>Participant project ZIP · v{{ course.release.version }} · <code>{{ course.release.filename }}</code></p>
+{% if course.release.url %}
+<p><a class="button" href="{{ course.release.url | escape }}">Open participant ZIP in Google Drive</a></p>
+{% else %}
+<p>The organizer has yet to provide the participant ZIP link.</p>
+{% endif %}
+<p><a href="{{ course.id }}.html">View lessons and scripts</a></p>
+{% endfor %}
+<h2>Use the ZIP</h2>
+<p>Download while online, extract the whole ZIP, then open the <code>.Rproj</code>. If Drive asks for access, sign in with your registered account. Follow <a href="setup.html">the setup guide</a> before running scripts.</p>

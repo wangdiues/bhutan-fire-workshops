@@ -1,0 +1,65 @@
+---
+pagination:
+  data: courses
+  size: 1
+  alias: course
+layout: page.njk
+permalink: "{{ course.id }}.html"
+eleventyComputed:
+  title: "{{ course.title }}"
+---
+<p class="eyebrow">WORKSHOP</p>
+<h1>{{ course.title }}</h1>
+<p class="lead">{{ course.description }}</p>
+<p><strong>Day 1</strong> · RStudio, datasets and concepts<br><strong>Day 2</strong> · Run recipes, replay available stages and interpret maps</p>
+<p><a href="setup.html">Set up RStudio</a> · <a href="downloads.html">Get the participant ZIP</a></p>
+
+<h2>Concepts for Day 1</h2>
+{% if course.id == "wui" %}
+<p><strong>Intermix</strong> describes buildings within substantial wildland vegetation. <strong>Interface</strong> describes a developed neighbourhood close to a large wildland patch. The Thimphu benchmark adapts these concepts to a raster grid. Each 50 m cell occupies 0.0025 km². The moving window counts surrounding buildings and averages vegetation cover before a rule classifies the cell.</p>
+<p><strong>Historical fire association</strong> compares a WUI rule with proximity to recorded fire evidence. Youden J is sensitivity plus specificity minus one. Hold out one gewog at a time to see how the rule performs away from the places used to choose it. Population, walking time and susceptibility describe different parts of exposure.</p>
+{% else %}
+<p><strong>NBR</strong> compares near-infrared and shortwave infrared reflectance using <code>(NIR - SWIR) / (NIR + SWIR)</code>. Subtract post-fire NBR from pre-fire NBR to obtain dNBR. Subtract the median change in a reference ring to account for typical background change. RBR scales the corrected change by pre-fire NBR.</p>
+<p><strong>Detection</strong> groups connected pixels that exceed the rule's thresholds. Held-out background zones estimate how often the rule finds a patch away from the target. Independent thermal observations provide a second source of evidence. The Composite Burn Index field plots and the independent accuracy sample answer different questions.</p>
+{% endif %}
+
+<h2>Try it with synthetic data</h2>
+{% if course.id == "wui" %}
+<p>Run the script in base R. The four neighbourhoods should produce intermix, interface, other and other. Increase the distance for neighbourhood B and check its class.</p>
+{% else %}
+<p>Run the script in base R. The first pixel should show the largest corrected change. Change one reference pixel and see how the offset responds.</p>
+{% endif %}
+<p><a href="examples/{{ course.id }}-demo.R" download>Download the synthetic exercise (.R)</a></p>
+<pre><code>{{ course.demo | escape }}</code></pre>
+
+<h2>Workshop scripts</h2>
+<ol class="lesson-list">
+{% for lesson in course.lessons %}
+<li><a href="{{ lesson.href }}"><span>{{ lesson.id }}</span>{{ lesson.title }}</a></li>
+{% endfor %}
+</ol>
+<details>
+<summary>Project launcher and shared R files</summary>
+<ul>
+<li><a href="code/{{ course.id }}/START_HERE.R" download>START_HERE.R</a></li>
+<li><a href="code/{{ course.id }}/r_studio_run/00_setup.R" download>Lesson setup</a></li>
+{% for file in course.helperFiles %}<li><a href="code/{{ course.id }}/R/{{ file }}" download>{{ file }}</a></li>{% endfor %}
+</ul>
+</details>
+
+<h2>Full analysis stages</h2>
+<p>Open the participant project and source <code>START_HERE.R</code>. Select the stage below and run it in the Console using a working copy. If your ZIP lacks a prerequisite, use the stage as a walkthrough with the course's reviewed outputs where available.</p>
+{% for stage in course.stages %}
+<details>
+<summary>{{ stage[0] }} · {{ stage[1] }}</summary>
+<p><strong>Requires</strong> {{ stage[2] }}</p>
+{% for file in course.stageFiles %}
+{% if file.startsWith(stage[0]) %}<p><a href="code/{{ course.id }}/scripts/{{ file }}" download>Download {{ file }}</a></p>{% endif %}
+{% endfor %}
+<pre><code>check_project("{{ stage[0] }}")
+# Run only after preflight passes.
+run_project("{{ stage[0] }}")</code></pre>
+<p><strong>Outputs</strong> <code>{{ stage[3] }}</code>. Read the Console for the full path to the stage log.</p>
+<p>{{ stage[4] }}</p>
+</details>
+{% endfor %}
