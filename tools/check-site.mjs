@@ -11,6 +11,7 @@ if (lessons.length !== 33 || html.length !== 38)
 for (const file of files) {
   const path = resolve(root, file);
   const ext = extname(file);
+  if (["assets/wui-demo.png", "assets/burn-demo.png"].includes(file.replaceAll("\\", "/"))) continue;
   if (![".html", ".R", ".Rproj", ".css", ".js"].includes(ext))
     throw new Error("Unexpected file in the public artifact: " + file);
   const content = readFileSync(path, "utf8");

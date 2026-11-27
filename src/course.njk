@@ -30,6 +30,15 @@ eleventyComputed:
 <p>Run the script in base R. The first pixel should show the largest corrected change. Change one reference pixel and see how the offset responds.</p>
 {% endif %}
 <p><a href="examples/{{ course.id }}-demo.R" download>Download the synthetic exercise (.R)</a></p>
+<figure class="example">
+{% if course.id == "wui" %}
+<img src="assets/wui-demo.png" alt="Four bars show building density. A is intermix, B is interface, and C and D are other.">
+<figcaption>The dashed line marks the building density threshold. D meets it and is too far from the example vegetation patch to qualify as interface.</figcaption>
+{% else %}
+<img src="assets/burn-demo.png" alt="The target's corrected dNBR is about 0.515. The three reference pixels are all near zero.">
+<figcaption>Reference pixels are close to zero after correction. The target retains a larger spectral change.</figcaption>
+{% endif %}
+</figure>
 <pre><code>{{ course.demo | escape }}</code></pre>
 
 <h2>Workshop scripts</h2>
